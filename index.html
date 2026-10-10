@@ -154,6 +154,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--green);outline-
 .ccard{background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:10px;display:flex;align-items:center;gap:10px;text-align:left;font-weight:700;font-size:.92rem;line-height:1.2}
 .ccard:hover{border-color:var(--green)}
 .ccard.bad{border-color:var(--no)}
+.ccard.glow{border-color:#e8a23c;box-shadow:0 0 0 4px rgba(232,162,60,.45)}
 
 /* nível 4 */
 .who{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
@@ -764,6 +765,11 @@ function tapPart(k){
     pMsg("✓ "+q.t,"ok"); renderParts(false);
     $("pNext").textContent=pi+1<PARTS.length?"Seguinte ▸":"Agora, a abelha a voar ▸";
     $("pNext").hidden=false; $("pNext").focus({preventScroll:true});
+  } else if(pTries>=2){
+    pTries++; Sound.play("ko"); pFound.add(q.k); renderParts(false);
+    pMsg(`Não faz mal! A resposta está agora marcada na flor: ${PART_NAME[q.k]}. ${q.t}`,"ko");
+    $("pNext").textContent=pi+1<PARTS.length?"Seguinte ▸":"Agora, a abelha a voar ▸";
+    $("pNext").hidden=false; $("pNext").focus({preventScroll:true});
   } else {
     pTries++; Sound.play("ko");
     pMsg(`${({petala:"Isso são",estame:"Isso são",nectar:"Isso é",pistilo:"Isso é"})[k]} ${PART_NAME[k]}. Procura ${PART_NAME[q.k]}${pTries>1?" ("+({petala:"as partes grandes e cor-de-rosa",estame:"os fios com pontas amarelas",nectar:"as gotinhas azuis no fundo",pistilo:"a coluna verde no meio"}[q.k])+")":""}.`,"ko");
@@ -781,7 +787,7 @@ function startGarden(){
   const good=counts.flatMap((c,p)=>Array(c).fill(p)), sprayP=Array.from({length:NSPRAY},()=>Math.floor(Math.random()*3));
   flowers=shuffle(good.map(p=>({p})).concat(sprayP.map(p=>({p,spray:true}))));
   beeAt=-1; carry=null; moves=0; lives=3; gOver=false; dizzy=0; smokeAt=-1;
-  $("gNext").hidden=true; $("gRetry").hidden=true; $("goalTxt").textContent=GOAL+" frutos";
+  $("gNext").hidden=true; $("gRetry").hidden=true; $("gNext").textContent="Continuar ▸"; $("goalTxt").textContent=GOAL+" frutos";
   gMsg("Toca numa flor para a abelha começar a viagem.","");
   show("vGarden"); stepTo(1); renderGarden();
 }
@@ -797,7 +803,7 @@ function renderGarden(){
   $("carry").innerHTML=c?`<span class="dot" style="background:${c.centro}"></span> Pólen de ${c.n}`:`<span class="dot"></span> Ainda nada`;
   $("lives").textContent="❤️".repeat(Math.max(lives,0))+"🤍".repeat(3-Math.max(lives,0));
   $("flights").textContent=`Voos: ${moves}`;
-  $("dizzyTx").hidden=!dizzy; $("dizzyTx").textContent=`😵 A abelha está tonta: mais ${dizzy} voo${dizzy>1?"s":""}`;
+  $("dizzyTx").hidden=!dizzy||gOver; $("dizzyTx").textContent=`😵 A abelha está tonta: mais ${dizzy} voo${dizzy>1?"s":""}`;
   setScore(flowers.filter(f=>f.fruit).length,GOAL,"Frutos");
 }
 function gShow(id){ const b=$(id); b.hidden=false; b.focus({preventScroll:true}); b.scrollIntoView({block:"nearest",behavior:"smooth"}); }
@@ -819,8 +825,9 @@ function visit(i){
     const again=f.found; f.found=true; lives--; carry=null; smokeAt=i; dizzy=2; Sound.play("smoke");
     if(lives<=0){
       gOver=true; renderGarden();
-      gMsg("A abelha pousou em 3 flores com pesticida e morreu. O pesticida não se vê, mas mata os polinizadores. Por isso, na horta, usamos proteção natural em vez de químicos.","ko");
-      gShow("gRetry"); return;
+      L2.stars=0;
+      gMsg("A abelha pousou em 3 flores com pesticida e morreu. O pesticida não se vê, mas mata os polinizadores. Por isso, na horta, usamos proteção natural em vez de químicos. Podes tentar outra vez ou seguir para a etapa seguinte.","ko");
+      $("gNext").textContent="Seguir para a etapa seguinte ▸"; $("gRetry").hidden=false; gShow("gNext"); return;
     }
     gMsg(drift+(again?`Esta flor tem pesticida! Saiu mais uma nuvem de fumo e a abelha perdeu outra vida. Vai ficar tonta nos próximos voos.`:`Pesticida! Saiu uma nuvem de fumo desta flor, que parecia igual às outras. A abelha perdeu uma vida e o pólen, e vai ficar tonta nos próximos voos.`),"ko");
   } else if(f.fruit){
@@ -855,9 +862,9 @@ const CICLO=[
   {e:"🍎",t:"Dentro do fruto há sementes"},
   {e:"🌱",t:"A semente germina e nasce uma planta nova"}
 ];
-let cNext=0, cOrder=[];
+let cNext=0, cOrder=[], cMiss=0;
 function startCycle(){
-  cNext=0; L2.cyc=0; cOrder=shuffle(CICLO.map((_,i)=>i));
+  cNext=0; cMiss=0; L2.cyc=0; cOrder=shuffle(CICLO.map((_,i)=>i));
   $("cNext").hidden=true; $("cMsg").textContent="Toca nos cartões pela ordem certa, começando pela flor."; $("cMsg").className="msg";
   show("vCycle"); stepTo(2); renderCycle();
 }
@@ -869,14 +876,16 @@ function renderCycle(){
 function pickCycle(b){
   const i=+b.dataset.i;
   if(i===cNext){
-    cNext++; Sound.play("ok"); renderCycle();
+    cNext++; cMiss=0; Sound.play("ok"); renderCycle();
     if(cNext===CICLO.length){
       $("cMsg").textContent="Muito bem! Sem polinizadores não há fruto, e sem fruto não há sementes para novas plantas."; $("cMsg").className="msg ok";
       Sound.play("end",true); $("cNext").hidden=false; $("cNext").focus({preventScroll:true});
     } else { $("cMsg").textContent="✓ Certo! O que vem a seguir?"; $("cMsg").className="msg ok"; }
   } else {
     L2.cyc++; Sound.play("ko"); b.classList.add("bad","shake"); setTimeout(()=>b.classList.remove("shake"),400);
-    $("cMsg").textContent=`Ainda não. Antes disso, vem o passo ${cNext+1}.`; $("cMsg").className="msg ko";
+    cMiss++;
+    $("cMsg").textContent=cMiss>=2?`Ainda não. Ajuda: o passo ${cNext+1} é o cartão a brilhar.`:`Ainda não. Antes disso, vem o passo ${cNext+1}.`; $("cMsg").className="msg ko";
+    if(cMiss>=2){ const g=$("cards").querySelector(`.ccard[data-i="${cNext}"]`); g&&g.classList.add("glow"); }
   }
 }
 $("cNext").addEventListener("click",startFood);
@@ -1136,6 +1145,12 @@ const FLORES=[
 ];
 let bSel=[], bDone=false;
 function startBloom(){ bSel=[]; bDone=false; show("vBloom"); stepTo(2); renderBloom(); }
+function bloomSolution(){
+  const n=FLORES.length, need=MESES.map((_,i)=>i+M0); let best=null;
+  for(let a=0;a<n;a++)for(let b=a+1;b<n;b++)for(let c=b+1;c<n;c++)for(let d=c;d<n;d++){
+    const set=[...new Set([a,b,c,d])]; if(need.every(m=>set.some(k=>FLORES[k].m.includes(m)))&&(!best||set.length<best.length)) best=set; }
+  return best||[];
+}
 function covered(){ return MESES.map((_,i)=>bSel.some(k=>FLORES[k].m.includes(i+M0))); }
 function renderBloom(){
   const cov=covered(), all=cov.every(Boolean);
@@ -1146,7 +1161,8 @@ function renderBloom(){
       <div class="cal-row cal-cov" role="row"><span role="rowheader">Há flores?</span>${cov.map(c=>`<span role="cell" class="${c?"y":"n"}">${c?"✓":"✗"}</span>`).join("")}</div>
     </div>
     <div class="who bloom">${FLORES.map((f,k)=>`<button type="button" class="whoopt" data-k="${k}" aria-pressed="${bSel.includes(k)}" ${bDone?"disabled":""}><span class="dotc" style="background:${f.c}"></span>${f.n}<small>${MESES[Math.max(0,f.m[0]-M0)]&&f.m[0]<M0?"Jan":["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"][f.m[0]-1]}–${["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"][f.m[f.m.length-1]-1]}</small></button>`).join("")}</div>
-    <p class="msg ${all?"ok":""}" id="bMsg2" aria-live="polite" style="min-height:1.5em">${bDone?(bSel.length<=3?"Excelente! Com só 3 plantas há flores em todos os meses.":"Muito bem! Nenhum mês fica sem flores."):all?"Todos os meses têm flores!":bSel.length>=4?"Já tens 4 plantas e ainda há meses sem flores. Tira uma e experimenta outra.":`Faltam flores em ${cov.filter(c=>!c).length} ${cov.filter(c=>!c).length===1?"mês":"meses"}.`}</p>
+    <p class="msg ${all?"ok":""}" id="bMsg2" aria-live="polite" style="min-height:1.5em">${bDone?(bSel.length<=3?"Excelente! Com só 3 plantas há flores em todos os meses.":"Muito bem! Nenhum mês fica sem flores."):all?"Todos os meses têm flores!":bSel.length>=4?"Já tens 4 plantas e ainda há meses sem flores. Tira uma e experimenta outra, ou vê uma solução.":`Faltam flores em ${cov.filter(c=>!c).length} ${cov.filter(c=>!c).length===1?"mês":"meses"}.`}</p>
+    ${!all&&!bDone&&bSel.length>=4?`<button class="next" id="bSol" type="button" style="align-self:center;max-width:380px">Ver uma solução ▸</button>`:""}
     ${all&&!bDone?`<button class="next" id="bOk" type="button" style="align-self:center;max-width:380px">Está pronto ▸</button>`:""}
     ${bDone?`<button class="next" id="bEnd" type="button" style="align-self:center;max-width:380px">Ver resultado ▸</button>`:""}`;
   $("vBloom").querySelectorAll(".whoopt").forEach(b=>b.addEventListener("click",()=>{
@@ -1156,6 +1172,7 @@ function renderBloom(){
   }));
   const ok=$("bOk"); ok&&ok.addEventListener("click",()=>{ bDone=true; D.bloom=bSel.length; Sound.play("end",true); renderBloom(); $("bEnd").focus({preventScroll:true}); });
   const e=$("bEnd"); e&&e.addEventListener("click",endDet);
+  const so=$("bSol"); so&&so.addEventListener("click",()=>{ bSel=bloomSolution(); Sound.play("pick"); renderBloom(); const m=$("bMsg2"); if(m) m.textContent="Esta é uma solução possível: repara como cada planta cobre os meses em que as outras não têm flor."; });
 }
 function endDet(){
   const good=D.flor>=4&&D.teia>=D.teiaOf-2;
