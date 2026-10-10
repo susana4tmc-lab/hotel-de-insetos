@@ -272,7 +272,8 @@ footer p{margin:0 0 4px}
 .refs{font-size:.8rem;color:var(--muted)}
 .refs summary{cursor:pointer;font-weight:700}
 .refs ul{margin:6px 0 0;padding-left:1.2em;display:grid;gap:4px}
-.refs a{color:inherit}
+.refs a{color:inherit;overflow-wrap:anywhere}
+.refs .consult{margin:6px 0 0}
 
 @media (max-width:760px){
   .sort,.garden-wrap,.build,.labelstep{grid-template-columns:1fr}
@@ -475,17 +476,20 @@ footer p{margin:0 0 4px}
   <details class="refs">
     <summary>Referências</summary>
     <ul>
-      <li>Agrupamento de Escolas João Villaret, EB do Fanqueiro e UCC de Loures. <i>Manual de apoio ao professor do 1.º ciclo: Mercado “À Mão de Semear”</i>. Ficha 21 (Construção de Hotéis de Insetos) e Ficha 19 (Proteção Natural da Horta).</li>
-      <li>LPN – Liga para a Protecção da Natureza. (2022/2023). <i>Hotel para insetos</i> [Guia de construção, projeto Bee Responsible; adaptado dos Recursos Ciência Viva]. Estudo Autónomo, Direção-Geral da Educação. <a href="https://estudoautonomo.dge.mec.pt/sites/default/files/inline-files/guia_construcao_hotel_insetos.pdf" target="_blank" rel="noopener">estudoautonomo.dge.mec.pt</a></li>
-      <li>Ciência Viva. (2019). <i>Hotel de insetos</i> [Recurso educativo]. Ciência Viva – Agência Nacional para a Cultura Científica e Tecnológica. <a href="https://webstorage.cienciaviva.pt/public/pt.cienciaviva.io/recursos/files/centro_recursos_cienciaviva_hotel_insectos_04-03-2019_6419484705c9b7.pdf" target="_blank" rel="noopener">cienciaviva.pt</a></li>
-      <li>Royal Horticultural Society. (s.d.). <i>How to make habitats for wild bees</i>. RHS. <a href="https://www.rhs.org.uk/wildlife/how-to-make-habitats-for-wild-bees" target="_blank" rel="noopener">rhs.org.uk</a></li>
-      <li>IPBES. (2016). <i>The assessment report on pollinators, pollination and food production</i>. Bona: Secretariado IPBES. Citado em: FAO (2022). <i>FAO anuncia projeto regional de proteção a insetos polinizadores</i>. Nações Unidas Brasil. <a href="https://brasil.un.org/pt-br/node/183318" target="_blank" rel="noopener">brasil.un.org</a></li>
-      <li>Klein, A.-M., Vaissière, B. E., Cane, J. H., Steffan-Dewenter, I., Cunningham, S. A., Kremen, C., &amp; Tscharntke, T. (2007). Importance of pollinators in changing landscapes for world crops. <i>Proceedings of the Royal Society B</i>, 274, 303–313. Resumo em: Our World in Data, <i>Pollinator dependence</i>. <a href="https://ourworldindata.org/pollinator-dependence" target="_blank" rel="noopener">ourworldindata.org</a></li>
+      <li>Agrupamento de Escolas João Villaret, Escola Básica do Fanqueiro e Unidade de Cuidados na Comunidade (UCC) de Loures. (2026). <i>Mercado “À Mão de Semear”: Manual de apoio ao professor do 1.º ciclo do ensino básico. Fichas de atividade cruzadas com as Aprendizagens Essenciais</i>. Loures. Ficha 21 (Construção de Hotéis de Insetos) e Ficha 19 (Proteção Natural da Horta).</li>
+      <li>Liga para a Protecção da Natureza (LPN). (2022/2023). <i>Hotel para insetos</i> [Guia de construção do projeto Bee Responsible, adaptado dos recursos da Ciência Viva]. Publicado no portal Estudo Autónomo, Direção-Geral da Educação (DGE), Ministério da Educação. Disponível em: <a href="https://estudoautonomo.dge.mec.pt/sites/default/files/inline-files/guia_construcao_hotel_insetos.pdf" target="_blank" rel="noopener">https://estudoautonomo.dge.mec.pt/sites/default/files/inline-files/guia_construcao_hotel_insetos.pdf</a></li>
+      <li>Ciência Viva – Agência Nacional para a Cultura Científica e Tecnológica. (2019). <i>Hotel de insetos</i> [Recurso educativo]. Lisboa: Ciência Viva. Disponível em: <a href="https://webstorage.cienciaviva.pt/public/pt.cienciaviva.io/recursos/files/centro_recursos_cienciaviva_hotel_insectos_04-03-2019_6419484705c9b7.pdf" target="_blank" rel="noopener">https://webstorage.cienciaviva.pt/public/pt.cienciaviva.io/recursos/files/centro_recursos_cienciaviva_hotel_insectos_04-03-2019_6419484705c9b7.pdf</a></li>
+      <li>Royal Horticultural Society (RHS, Real Sociedade de Horticultura do Reino Unido). (s.d.). <i>How to make habitats for wild bees</i> [Como criar abrigos para abelhas silvestres]. Londres: RHS. Disponível em: <a href="https://www.rhs.org.uk/wildlife/how-to-make-habitats-for-wild-bees" target="_blank" rel="noopener">https://www.rhs.org.uk/wildlife/how-to-make-habitats-for-wild-bees</a></li>
+      <li>Plataforma Intergovernamental Científico-Política sobre Biodiversidade e Serviços de Ecossistemas (IPBES). (2016). <i>The assessment report of the Intergovernmental Science-Policy Platform on Biodiversity and Ecosystem Services on pollinators, pollination and food production</i> [Relatório de avaliação sobre polinizadores, polinização e produção de alimentos] (S. G. Potts, V. L. Imperatriz-Fonseca &amp; H. T. Ngo, Eds.). Bona: Secretariado da IPBES. <a href="https://doi.org/10.5281/zenodo.3402856" target="_blank" rel="noopener">https://doi.org/10.5281/zenodo.3402856</a></li>
+      <li>Organização das Nações Unidas para a Alimentação e a Agricultura (FAO). (2022). <i>FAO anuncia projeto regional de proteção a insetos polinizadores</i>. Nações Unidas Brasil. Disponível em: <a href="https://brasil.un.org/pt-br/node/183318" target="_blank" rel="noopener">https://brasil.un.org/pt-br/node/183318</a></li>
+      <li>Klein, A.-M., Vaissière, B. E., Cane, J. H., Steffan-Dewenter, I., Cunningham, S. A., Kremen, C., &amp; Tscharntke, T. (2007). Importance of pollinators in changing landscapes for world crops. <i>Proceedings of the Royal Society B: Biological Sciences</i>, 274(1608), 303–313. <a href="https://doi.org/10.1098/rspb.2006.3721" target="_blank" rel="noopener">https://doi.org/10.1098/rspb.2006.3721</a></li>
+      <li>Our World in Data. (s.d.). <i>Pollinator dependence</i> [Dependência dos polinizadores; resumo dos dados de Klein et al., 2007]. Global Change Data Lab / Universidade de Oxford. Disponível em: <a href="https://ourworldindata.org/pollinator-dependence" target="_blank" rel="noopener">https://ourworldindata.org/pollinator-dependence</a></li>
     </ul>
+    <p class="consult">Endereços consultados em outubro de 2026.</p>
   </details>
   <footer>
-    <p><b>Fontes:</b> Ficha 21 do Manual “À Mão de Semear”; LPN e Ciência Viva (guias do hotel de insetos); RHS; IPBES/FAO (polinizadores e alimentação); Klein et al. (2007).</p>
-    <p>Manual de Apoio ao Professor do 1.º Ciclo · Mercado “À Mão de Semear” · AE João Villaret · EB do Fanqueiro · UCC de Loures.</p>
+    <p><b>Fontes:</b> Ficha 21 do Manual “À Mão de Semear”; Liga para a Protecção da Natureza (LPN) e Ciência Viva (guias do hotel de insetos); Royal Horticultural Society (RHS); Plataforma Intergovernamental sobre Biodiversidade e Serviços de Ecossistemas (IPBES) e Organização das Nações Unidas para a Alimentação e a Agricultura (FAO), sobre polinizadores e alimentação; Klein et al. (2007). Citações completas em Referências.</p>
+    <p>Manual de Apoio ao Professor do 1.º Ciclo · Mercado “À Mão de Semear” · Agrupamento de Escolas João Villaret · Escola Básica do Fanqueiro · Unidade de Cuidados na Comunidade (UCC) de Loures.</p>
   </footer>
 </div>
 
