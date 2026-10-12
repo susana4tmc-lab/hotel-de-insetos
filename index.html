@@ -51,17 +51,50 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--green);outline-
 .pill{background:var(--panel);border:2px solid var(--line);border-radius:99px;padding:7px 14px;font-weight:700;display:inline-flex;align-items:center;gap:6px;line-height:1}
 .pill:hover{border-color:var(--ink)}
 
-/* entrada */
-.intro{display:flex;flex-direction:column;gap:16px;flex:1}
-.intro-head{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:20px;align-items:center}
-.intro h2{font-size:clamp(1.9rem,4.5vw,2.8rem)}
-.intro-head p{margin:.5em 0 0;max-width:62ch}
-.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.mode{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:var(--panel);border:2px solid var(--line);border-radius:16px;padding:14px 16px}
-.mode:hover{border-color:var(--green)}
-.mode .chip{font-size:1.7rem;line-height:1}
-.mode b{font-family:var(--font-display);font-size:1.2rem;line-height:1.15}
-.mode small{color:var(--muted);line-height:1.3}
+/* ecrã 1: entrada limpa (hotel grande com insetos a entrar + Jogar); ecrã 2: escolher o nível */
+.intro:not([hidden]){display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;flex:1}
+.intro h2{font-size:clamp(2rem,8vw,3.2rem)}
+.intro .lead{margin:0;max-width:40ch;font-size:1.05rem}
+@media (max-height:500px){ .intro .lead{font-size:.95rem;line-height:1.35} .intro h2{font-size:1.9rem} }
+.hero{position:relative;width:min(62vw,250px,36vh)}
+.hero svg{display:block;width:100%;height:auto}
+.hero .fly{position:absolute;left:0;top:0;font-size:min(9vw,36px,6vh);line-height:1;opacity:0;pointer-events:none;transform:translate(-50%,-50%)}
+.hero .fly.go{animation:flyin 1.6s ease-in-out forwards}
+@keyframes flyin{
+  0%{opacity:0;left:var(--x0);top:var(--y0);transform:translate(-50%,-50%) scale(1)}
+  12%{opacity:1}
+  45%{left:var(--xm);top:var(--ym);transform:translate(-50%,-50%) rotate(-12deg) scale(1)}
+  85%{opacity:1;left:var(--x1);top:var(--y1);transform:translate(-50%,-50%) rotate(8deg) scale(.75)}
+  100%{opacity:0;left:var(--x1);top:var(--y1);transform:translate(-50%,-50%) scale(.2)}}
+.hero .room{transform-box:fill-box;transform-origin:center}
+.hero .room.glow{animation:glow .6s ease-out}
+@keyframes glow{0%{filter:none}40%{filter:brightness(1.35) drop-shadow(0 0 3px #f2c14e)}100%{filter:none}}
+.playbtn{margin-top:6px;background:var(--green);color:#fff;border:0;border-radius:99px;padding:14px 46px;font-family:var(--font-display);font-size:1.6rem;font-weight:800;box-shadow:0 4px 0 color-mix(in srgb,var(--green) 60%,#000)}
+.playbtn:active{transform:translateY(3px);box-shadow:0 1px 0 color-mix(in srgb,var(--green) 60%,#000)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .playbtn{color:#14210f}}
+:root[data-theme="dark"] .playbtn{color:#14210f}
+@media (min-width:641px) and (max-height:600px), (orientation:landscape) and (max-height:500px){
+  .intro:not([hidden]){display:grid;grid-template-columns:auto minmax(0,26rem);justify-content:center;align-items:center;gap:8px 32px;text-align:left}
+  .intro .hero{grid-row:1/5;width:min(30vw,60vh,230px)}
+  .intro .playbtn{justify-self:start}
+}
+.linkbtn{background:none;border:0;padding:6px 2px;color:var(--green);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.levels:not([hidden]){display:flex;flex-direction:column;gap:12px;flex:1}
+.levels-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.levels h2{font-size:clamp(1.6rem,6vw,2.2rem)}
+.lvls{display:grid;gap:10px}
+.lvlcard{display:grid;grid-template-columns:2.4rem minmax(0,1fr) auto;align-items:center;gap:2px 12px;text-align:left;background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:10px 14px}
+.lvlcard:hover{border-color:var(--green)}
+.lvlcard .chip{grid-row:span 2;font-size:1.9rem;line-height:1;text-align:center}
+.lvlcard b{font-family:var(--font-display);font-size:1.15rem;line-height:1.15}
+.lvlcard small{grid-column:2;color:var(--muted);line-height:1.3}
+.lvlcard .age{grid-column:3;grid-row:1/3;font-size:.78rem;font-weight:700;color:var(--green);background:var(--green-soft);border-radius:99px;padding:3px 9px;white-space:nowrap}
+.levels .fact{font-size:.95rem}
+@media (max-width:420px){ .lvlcard{grid-template-columns:2.2rem minmax(0,1fr)} .lvlcard .age{grid-column:2;grid-row:auto;justify-self:start;margin-top:4px} }
+@media (min-width:641px){ .lvls{grid-template-columns:repeat(2,1fr)} .lvlcard{grid-template-columns:1fr;align-content:start;gap:4px;padding:12px 14px} .lvlcard .chip,.lvlcard small,.lvlcard .age{grid-column:auto;grid-row:auto;text-align:left;justify-self:start} }
+@media (min-width:900px){ .lvls{grid-template-columns:repeat(4,1fr)} }
+@media (max-height:520px){ .levels:not([hidden]){gap:8px} .levels .fact{font-size:.85rem;padding:8px 12px} .lvlcard .chip{font-size:1.5rem} }
+@media (prefers-reduced-motion:reduce){ .hero .fly{display:none} }
 .fact{padding:12px 14px;border-left:4px solid var(--sun);background:var(--sun-soft);border-radius:0 10px 10px 0}
 .fact p{margin:0}
 
@@ -294,10 +327,6 @@ footer p{margin:0 0 4px}
   .steps li.on{font-size:.78rem;padding-right:10px}
 }
 @media (max-width:640px){
-  .intro-head{grid-template-columns:minmax(0,1fr) 84px;gap:12px}
-  .intro-head p{grid-column:1/-1}
-  .intro-head>div:first-child{display:contents}
-  #introArt{grid-column:2;grid-row:1/3;align-self:center}
   .logo{width:70px}
   .brand h1{font-size:1.2rem}
   .card .art{height:76px;font-size:3.8rem}
@@ -344,9 +373,9 @@ footer p{margin:0 0 4px}
   .slot .e,.ccard .e{font-size:1.4rem}
   .ccard{padding:6px 8px;font-size:.8rem}
   .cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
-  .modes{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-  .mode{padding:10px}
-  .mode small{font-size:.78rem}
+  .lvls{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .lvlcard{padding:8px 10px}
+  .lvlcard small{font-size:.78rem}
   .tray{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:7px}
   .mat{padding:6px;font-size:.82rem}
 }
@@ -372,20 +401,26 @@ footer p{margin:0 0 4px}
   </header>
 
   <!-- ENTRADA -->
+  <!-- ECRÃ 1: ENTRADA -->
   <section class="intro" id="vIntro">
-    <div class="intro-head">
-      <div>
-        <p class="eyebrow">Mercado “À Mão de Semear” · Polinização e biodiversidade</p>
-        <h2>Pequenos bichos, grandes ajudantes</h2>
-        <p>Sem insetos não há morangos, abóboras nem maçãs. Uns levam o pólen de flor em flor, outros comem as pragas. Um hotel de insetos dá-lhes abrigo na horta.</p>
-      </div>
-      <div id="introArt" aria-hidden="true"></div>
+    <p class="eyebrow">Mercado “À Mão de Semear” · Polinização e biodiversidade</p>
+    <h2>Pequenos bichos, grandes ajudantes</h2>
+    <div class="hero" aria-hidden="true"><div id="introArt"></div><span class="fly" id="heroFly"></span></div>
+    <p class="lead">Sem insetos não há morangos, abóboras nem maçãs. Uns levam o pólen de flor em flor, outros comem as pragas. Um hotel de insetos dá-lhes abrigo na horta.</p>
+    <button class="playbtn" id="go" type="button">Jogar ▶</button>
+  </section>
+
+  <!-- ECRÃ 2: NÍVEIS -->
+  <section class="levels" id="vLevels" hidden>
+    <div class="levels-head">
+      <h2>Escolhe o nível</h2>
+      <button class="linkbtn" id="home" type="button">← Início</button>
     </div>
-    <div class="modes">
-      <button class="mode" id="m1" type="button"><span class="chip" aria-hidden="true">🐞</span><b>Amigo ou praga?</b><small>Descobre quem ajuda a horta e quem a estraga (1.º e 2.º anos).</small></button>
-      <button class="mode" id="m2" type="button"><span class="chip" aria-hidden="true">🐝</span><b>A viagem do pólen</b><small>Descobre as partes da flor, voa de flor em flor fugindo aos pesticidas, ordena o ciclo da planta e vê que alimentos dependem dos polinizadores (3.º ano).</small></button>
-      <button class="mode" id="m3" type="button"><span class="chip" aria-hidden="true">🏠</span><b>Monta o hotel</b><small>Escolhe os materiais, convida os hóspedes e faz a etiqueta para o mercado (4.º ano).</small></button>
-      <button class="mode" id="m4" type="button"><span class="chip" aria-hidden="true">🔎</span><b>Detetive da horta</b><small>Flores macho e fêmea, teia alimentar e pesticidas, flores todo o ano (2.º ciclo).</small></button>
+    <div class="lvls">
+      <button class="lvlcard" id="m1" type="button"><span class="chip" aria-hidden="true">🐞</span><b>Amigo ou praga?</b><small>Quem ajuda a horta e quem a estraga.</small><span class="age">1.º e 2.º anos</span></button>
+      <button class="lvlcard" id="m2" type="button"><span class="chip" aria-hidden="true">🐝</span><b>A viagem do pólen</b><small>Partes da flor, voo de flor em flor e alimentos.</small><span class="age">3.º ano</span></button>
+      <button class="lvlcard" id="m3" type="button"><span class="chip" aria-hidden="true">🏠</span><b>Monta o hotel</b><small>Materiais, hóspedes e etiqueta para o mercado.</small><span class="age">4.º ano</span></button>
+      <button class="lvlcard" id="m4" type="button"><span class="chip" aria-hidden="true">🔎</span><b>Detetive da horta</b><small>Flores macho e fêmea, teia alimentar e pesticidas.</small><span class="age">2.º ciclo</span></button>
     </div>
     <div class="fact"><p><b>Sabias que…</b> mais de 75% das principais culturas alimentares do mundo dependem, de alguma forma, dos polinizadores?</p></div>
   </section>
@@ -465,7 +500,7 @@ footer p{margin:0 0 4px}
       <div class="actions">
         <button class="primary" id="print" type="button">🖨️ Imprimir etiqueta</button>
         <button id="again3" type="button">Montar outro hotel</button>
-        <button id="menu3" type="button">Menu</button>
+        <button id="menu3" type="button">Mudar de nível</button>
       </div>
     </div>
     <div id="labelOut" class="label brand-host"></div>
@@ -635,11 +670,12 @@ const CELL={
 
 /* ---------- estado e navegação ---------- */
 let mode=0, deck=[], idx=0, ok=0, misses=[], answered=false, phase="";
-const views=["vIntro","vParts","vGarden","vCycle","vDet","vWeb","vBloom","vSort","vBuild","vLabel","vEnd"];
-function show(v){ views.forEach(x=>$(x).hidden=(x!==v)); const inGame=v!=="vIntro"; $("quit").hidden=!inGame; $("score").hidden=!(v==="vSort"||v==="vGarden"||v==="vParts"||v==="vDet"); $("steps").hidden=!((mode===2&&["vParts","vGarden","vCycle","vSort"].includes(v))||(mode===4&&["vDet","vWeb","vBloom"].includes(v))); window.scrollTo(0,0); }
+const views=["vIntro","vLevels","vParts","vGarden","vCycle","vDet","vWeb","vBloom","vSort","vBuild","vLabel","vEnd"];
+function show(v){ views.forEach(x=>$(x).hidden=(x!==v)); const inGame=v!=="vIntro"&&v!=="vLevels"; $("quit").hidden=!inGame; $("score").hidden=!(v==="vSort"||v==="vGarden"||v==="vParts"||v==="vDet"); $("steps").hidden=!((mode===2&&["vParts","vGarden","vCycle","vSort"].includes(v))||(mode===4&&["vDet","vWeb","vBloom"].includes(v))); window.scrollTo(0,0); }
 function stepTo(n){ [...$("steps").children].forEach((li,i)=>{li.className=i<n?"done":i===n?"on":""; if(i===n) li.setAttribute("aria-current","step"); else li.removeAttribute("aria-current");}); }
 function setScore(n,of,lbl){ $("sLbl").textContent=lbl||"Certos"; $("sOk").textContent=n; $("sOf").textContent=of?(" / "+of):""; }
-function menu(){ mode=0; show("vIntro"); }
+// «Sair» e «Menu» levam à escolha do nível; o botão «voltar» do telemóvel recua um ecrã em vez de sair do jogo
+function menu(){ mode=0; if(history.state?.v==="game") history.back(); else show("vLevels"); }
 
 /* ---------- ordenar (nível 1 e nível 2B) ---------- */
 function startSort(items,yes,no){
@@ -685,7 +721,7 @@ function endSort(){
     ${mode===2?`<div class="panel"><p><b>A tua viagem:</b> partes da flor ${L2.parts}/4 à primeira · voo da abelha <span class="stars" style="font-size:1.1rem">${"★".repeat(L2.stars)}${"☆".repeat(3-L2.stars)}</span> · ciclo da planta ${L2.cyc?L2.cyc+" engano"+(L2.cyc>1?"s":""):"sem enganos"} · alimentos ${ok}/${deck.length}</p></div>`:""}
     ${misses.length?`<p>Revê estes:</p><ul class="misses">${misses.map(x=>`<li><span class="em" aria-hidden="true">${art(x)}</span><b>${esc(x.n)}</b><span>${esc(x.t)}</span></li>`).join("")}</ul>`:"<p>Acertaste em todos!</p>"}
     ${tail}
-    <div class="actions"><button class="primary" id="again" type="button">Jogar outra vez</button>${mode===1?`<button id="toNext" type="button">Próximo nível: A viagem do pólen ▸</button>`:mode===2?`<button id="toNext" type="button">Próximo nível: Monta o hotel ▸</button>`:""}<button id="toMenu" type="button">Menu</button></div>`;
+    <div class="actions"><button class="primary" id="again" type="button">Jogar outra vez</button>${mode===1?`<button id="toNext" type="button">Próximo nível: A viagem do pólen ▸</button>`:mode===2?`<button id="toNext" type="button">Próximo nível: Monta o hotel ▸</button>`:""}<button id="toMenu" type="button">Mudar de nível</button></div>`;
   show("vEnd");
   $("again").addEventListener("click",()=>start(mode));
   $("toMenu").addEventListener("click",menu);
@@ -1184,7 +1220,7 @@ function endDet(){
       <li><span class="em" aria-hidden="true">📅</span><b>Flores todo o ano</b><span>Todos os meses com flores, com ${D.bloom} plantas</span></li>
     </ul>
     <div class="fact"><p><b>Para levar para a horta:</b> sem pesticidas, com um hotel de insetos e flores de fevereiro a outubro, os polinizadores e os auxiliares trabalham por nós.</p></div>
-    <div class="actions"><button class="primary" id="again" type="button">Jogar outra vez</button><button id="toMenu" type="button">Menu</button></div>`;
+    <div class="actions"><button class="primary" id="again" type="button">Jogar outra vez</button><button id="toMenu" type="button">Mudar de nível</button></div>`;
   show("vEnd");
   $("again").addEventListener("click",()=>start(4));
   $("toMenu").addEventListener("click",menu);
@@ -1194,6 +1230,7 @@ function endDet(){
 const STEPLBL={2:["Partes da flor","O voo da abelha","Da flor à semente","Alimentos"],4:["Flores macho e fêmea","Teia alimentar","Flores todo o ano"]};
 function start(m){
   mode=m; Sound.play("pick");
+  if(history.state?.v!=="game") try{ history.pushState({v:"game"},""); }catch(e){}
   if(STEPLBL[m]){ $("steps").innerHTML=STEPLBL[m].map(t=>`<li>${t}</li>`).join(""); $("steps").style.gridTemplateColumns=`repeat(${STEPLBL[m].length},minmax(0,1fr))`; }
   if(m===4){ startDet(); return; }
   if(m===1){ phase="bugs"; startSort(shuffle(shuffle(BICHOS.filter(x=>x.a)).slice(0,6).concat(shuffle(BICHOS.filter(x=>!x.a)).slice(0,6))),{ic:"💚",lb:"Amigo da horta",sm:"poliniza ou come pragas"},{ic:"🚫",lb:"Praga",sm:"estraga as plantas"}); }
@@ -1210,7 +1247,33 @@ document.addEventListener("keydown",e=>{
   if($("vSort").hidden||answered||e.target.tagName==="INPUT") return;
   if(e.key==="1") answer(1); else if(e.key==="2") answer(0);
 });
-$("introArt").innerHTML=SVG.hotel;
+$("go").addEventListener("click",()=>{ Sound.play("pick"); try{ history.pushState({v:"levels"},""); }catch(e){} show("vLevels"); });
+$("home").addEventListener("click",()=>{ if(history.state?.v==="levels") history.back(); else show("vIntro"); });
+addEventListener("popstate",e=>{ const v=e.state?.v; mode=0; show(v==="game"||v==="levels"?"vLevels":"vIntro"); });
+try{ history.replaceState(null,""); }catch(e){}
+
+// Ecrã de entrada: insetos a voar para os quartos do hotel
+(function hero(){
+  const art=$("introArt"), fly=$("heroFly");
+  art.innerHTML=SVG.hotel.replace(/<text[^>]*>[^<]*<\/text>/,"");
+  const rooms=[...art.querySelectorAll("svg > rect")].slice(1);
+  rooms.forEach(r=>r.classList.add("room"));
+  // centro de cada quarto, em % da imagem (viewBox 120×120)
+  const spots=[[33,52],[67,52],[33,77],[67,77]];
+  const guests=["🐝","🐞","🦋","🐝","🪲","🐞","🐝","🦋"];
+  let n=0;
+  const next=()=>{
+    if($("vIntro").hidden){ setTimeout(next,800); return; }
+    const [x1,y1]=spots[(n*3)%4], left=n%2===0;
+    fly.textContent=guests[n%guests.length];
+    fly.style.cssText=`--x0:${left?-8:108}%;--y0:${4+(n%3)*6}%;--xm:${left?22:78}%;--ym:${18+(n%2)*8}%;--x1:${x1}%;--y1:${y1}%`;
+    fly.classList.remove("go"); void fly.offsetWidth; fly.classList.add("go");
+    const room=rooms[(n*3)%4]; n++;
+    setTimeout(()=>{ if(room){ room.classList.remove("glow"); void room.getBoundingClientRect(); room.classList.add("glow"); } },1400);
+  };
+  fly.addEventListener("animationend",()=>setTimeout(next,450));
+  if(!matchMedia("(prefers-reduced-motion: reduce)").matches) setTimeout(next,500);
+})();
 renderSound();
 })();
 </script>
